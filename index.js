@@ -14,4 +14,5 @@ fs.readFile("assets/sql/create.sql", { encoding: "ascii" }, function (err, data)
     db.exec(data);
 })
 
+web.use(express.static("assets/static"));
 web.listen(8080);
