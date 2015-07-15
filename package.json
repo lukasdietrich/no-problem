@@ -25,6 +25,7 @@
     "express": "^4.13.1",
     "express-session": "^1.11.3",
     "octonode": "^0.7.1",
+    "session-file-store": "0.0.14",
     "sqlite3": "^3.0.9",
     "yargs": "^3.15.0"
   }
