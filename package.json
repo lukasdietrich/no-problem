@@ -23,6 +23,7 @@
   "homepage": "https://github.com/lukasdietrich/no-problem",
   "dependencies": {
     "express": "^4.13.1",
+    "express-session": "^1.11.3",
     "octonode": "^0.7.1",
     "sqlite3": "^3.0.9",
     "yargs": "^3.15.0"
