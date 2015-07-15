@@ -1,9 +1,11 @@
-var fs       = require("fs");
+var fs        = require("fs");
 
-var octonode = require("octonode");
-var express  = require("express");
-var sqlite   = require("sqlite3");
-var yargs    = require("yargs");
+var octonode  = require("octonode");
+var express   = require("express");
+var session   = require("express-session");
+var filestore = require("session-file-store")(session);
+var sqlite    = require("sqlite3");
+var yargs     = require("yargs");
 
 var args = yargs
     .usage("Usage: $0 [options]")
@@ -23,7 +25,13 @@ fs.readFile("assets/sql/create.sql", { encoding: "ascii" }, function (err, data)
         throw err;
 
     db.exec(data);
-})
+});
 
+web.use(session({
+    secret: Math.random().toString(32).substring(2),
+    store: new filestore(),
+    resave: true,
+    saveUninitialized: false
+}));
 web.use(express.static("assets/static"));
 web.listen(args.p);
