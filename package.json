@@ -1,0 +1,24 @@
+{
+  "name": "no-problem",
+  "version": "0.0.0",
+  "description": "GitHub private issues made public",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/lukasdietrich/no-problem.git"
+  },
+  "keywords": [
+    "github",
+    "issue",
+    "mirror"
+  ],
+  "author": "Lukas Dietrich <lukas@lukasdietrich.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lukasdietrich/no-problem/issues"
+  },
+  "homepage": "https://github.com/lukasdietrich/no-problem"
+}
