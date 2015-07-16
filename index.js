@@ -1,11 +1,14 @@
-var fs        = require("fs");
+var fs         = require("fs");
 
-var octonode  = require("octonode");
-var express   = require("express");
-var session   = require("express-session");
-var filestore = require("session-file-store")(session);
-var sqlite    = require("sqlite3");
-var yargs     = require("yargs");
+var octonode   = require("octonode");
+var express    = require("express");
+var session    = require("express-session");
+var filestore  = require("session-file-store")(session);
+var sqlite     = require("sqlite3");
+var yargs      = require("yargs");
+
+var settings     = require("./lib/settings");
+var authenticate = require("./routes/authenticate");
 
 var args = yargs
     .usage("Usage: $0 [options]")
@@ -18,20 +21,45 @@ var args = yargs
     .argv;
 
 var db = new sqlite.Database(args.d);
-var web = express();
+var conf = new settings(db);
 
 fs.readFile("assets/sql/create.sql", { encoding: "ascii" }, function (err, data) {
     if (err)
         throw err;
 
-    db.exec(data);
+    db.exec(data, configure);
 });
 
-web.use(session({
-    secret: Math.random().toString(32).substring(2),
-    store: new filestore(),
-    resave: true,
-    saveUninitialized: false
-}));
-web.use(express.static("assets/static"));
-web.listen(args.p);
+function configure () {
+    conf.batchGet(["app_id", "app_secret", "app_url"], [
+        function (prompt, done) {
+            prompt.question("GitHub Application client id: ", done);
+        },
+
+        function (prompt, done) {
+            prompt.question("GitHub Application client secret: ", done);
+        },
+
+        function (prompt, done) {
+            prompt.question("Public host url (%YOUR-URL%/auth/github/callback): ", done);
+        }
+    ], function (values) {
+        var web = express();
+
+        web.use(session({
+            secret: Math.random().toString(32).substring(2),
+            store: new filestore(),
+            resave: true,
+            saveUninitialized: false
+        }));
+
+        web.use("/auth", authenticate.init({
+            clientID: values[0],
+            clientSecret: values[1],
+            url: values[2]
+        }, db));
+
+        web.use(express.static("assets/static"));
+        web.listen(args.p);
+    })
+}
