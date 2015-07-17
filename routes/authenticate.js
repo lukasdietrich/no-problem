@@ -16,9 +16,17 @@ function init (options, database) {
         };
 
         database.run("insert or ignore into `users` values (?, MAX(0, (select count(*) from `users`)), ?, ?, ?) ;",
-                    [profile.id, profile.token, profile.username, profile.displayName]);
+                    [profile.id, profile.token, profile.username, profile.displayName], function (err) {
+                        if (err)
+                            throw err;
 
-        done(null, profile);
+                        database.get("select * from `users` where id = ? ;", [profile.id], function (err, row) {
+                            if (err)
+                                throw err;
+
+                            done(null, row);
+                        });
+                    });
     }));
 
     passport.serializeUser(function(user, done) {
