@@ -5,7 +5,7 @@ function init (options, database) {
 
     router.use(function (req, res, next) {
         if (!req.session.passport || !req.session.passport.user) {
-            res.redirect("/auth/admin");
+            res.redirect("/auth/admin?originalTarget=/admin");
         } else {
             next();
         }

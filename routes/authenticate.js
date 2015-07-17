@@ -40,10 +40,21 @@ function init (options, database) {
     router.use(passport.initialize());
     router.use(passport.session());
 
-    router.get("/", passport.authenticate("github", { scope: ["user:email"] }));
-    router.get("/admin", passport.authenticate("github", { scope: ["user:email", "repo"] }));
+    var setRedirect = function (req, res, next) {
+        if (req.query.originalTarget)
+            req.session.originalTarget = req.query.originalTarget;
 
-    router.get("/github/callback", passport.authenticate("github", { failureRedirect: "/auth", successRedirect : "/" }));
+        next();
+    }
+
+    router.get("/", setRedirect, passport.authenticate("github", { scope: ["user:email"] }));
+    router.get("/admin", setRedirect, passport.authenticate("github", { scope: ["user:email", "repo"] }));
+
+    router.get("/github/callback", passport.authenticate("github", {
+        failureRedirect: "/auth"
+    }), function (req, res) {
+        res.redirect(req.session.originalTarget || "/");
+    });
 
     return router;
 }
