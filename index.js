@@ -9,6 +9,7 @@ var yargs      = require("yargs");
 
 var settings     = require("./lib/settings");
 var authenticate = require("./routes/authenticate");
+var admin        = require("./routes/admin");
 
 var args = yargs
     .usage("Usage: $0 [options]")
@@ -61,6 +62,8 @@ function configure () {
             clientSecret: values[1],
             url: values[2]
         }, db));
+
+        web.use("/admin", admin.init(db));
 
         web.use(express.static("assets/static"));
         web.listen(args.p);
