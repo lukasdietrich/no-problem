@@ -46,6 +46,9 @@ function configure () {
     ], function (values) {
         var web = express();
 
+        web.set("views", "assets/views");
+        web.set("view engine", "jade");
+
         web.use(session({
             secret: Math.random().toString(32).substring(2),
             store: new filestore(),
