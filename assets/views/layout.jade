@@ -1,0 +1,16 @@
+doctype html
+html(lang="en")
+    head
+        title no &middot; problem
+        link(rel="stylesheet", href="/css/style.css")
+    body
+        .wrapper
+            header
+                h1 no &middot; problem
+                
+                if realm
+                    span.realm= realm
+
+                block header
+            .main
+                block content
