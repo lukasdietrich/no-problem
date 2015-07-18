@@ -13,5 +13,6 @@ create table if not exists `users` (
 
 create table if not exists `mirrors` (
     `id` integer not null primary key autoincrement ,
-    `repository` varchar ( 64 ) not null unique
+    `repository` varchar ( 64 ) not null unique ,
+    `active` boolean not null 
 ) ;
