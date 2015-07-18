@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+    h2 Repositories
+    ul.list.mirror-list
+        each mirror in mirrors
+            li
+                input(type="checkbox", checked=!!mirror.active, id="mirror_" + mirror.id)
+                span= mirror.repository

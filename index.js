@@ -1,6 +1,5 @@
 var fs         = require("fs");
 
-var octonode   = require("octonode");
 var express    = require("express");
 var session    = require("express-session");
 var filestore  = require("session-file-store")(session);
@@ -8,6 +7,8 @@ var sqlite     = require("sqlite3");
 var yargs      = require("yargs");
 
 var settings     = require("./lib/settings");
+var data         = require("./lib/data");
+
 var authenticate = require("./routes/authenticate");
 var admin        = require("./routes/admin");
 
@@ -63,7 +64,7 @@ function configure () {
             url: values[2]
         }, db));
 
-        web.use("/admin", admin.init(db));
+        web.use("/admin", admin.init(new data(db)));
 
         web.use(express.static("assets/static"));
         web.listen(args.p);

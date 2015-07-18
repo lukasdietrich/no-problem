@@ -1,6 +1,6 @@
 var express = require("express");
 
-function init (options, database) {
+function init (data) {
     var router = express.Router();
 
     router.use(function (req, res, next) {
@@ -9,6 +9,15 @@ function init (options, database) {
         } else {
             next();
         }
+    });
+
+    router.get("/", function (req, res) {
+        data.listMirrors(function (err, mirrors) {
+            res.render("admin/mirrors", {
+                realm: "admin",
+                mirrors: mirrors
+            });
+        });
     });
 
     return router;
