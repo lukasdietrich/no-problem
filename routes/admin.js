@@ -11,11 +11,20 @@ function init (data) {
         }
     });
 
+    router.get("/ajax/set/mirror", function (req, res) {
+        data.setMirrorState(req.query.id, req.query.active === "true", function (err) {
+            res.json({ err: err || false });
+        });
+    });
+
     router.get("/", function (req, res) {
         data.listMirrors(function (err, mirrors) {
             res.render("admin/mirrors", {
                 realm: "admin",
-                mirrors: mirrors
+                mirrors: mirrors,
+                scripts: [
+                    "/js/admin.js"
+                ]
             });
         });
     });

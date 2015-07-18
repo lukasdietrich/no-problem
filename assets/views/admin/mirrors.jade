@@ -5,5 +5,5 @@ block content
     ul.list.mirror-list
         each mirror in mirrors
             li
-                input(type="checkbox", checked=!!mirror.active, id="mirror_" + mirror.id)
+                input(type="checkbox", checked=!!mirror.active, data-mirror-id=mirror.id)
                 span= mirror.repository
